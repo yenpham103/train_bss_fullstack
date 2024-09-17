@@ -1,0 +1,105 @@
+/* BulkAction.css */
+
+.bulk-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 15px 25px;
+  background-color: #f0f4f8;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.selected-count-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.selected-count-wrapper input[type='checkbox'] {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.selected-count {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+.no-products-message {
+  color: #6c757d;
+  font-size: 16px;
+  text-align: center;
+  margin: 0;
+  padding: 10px 0;
+}
+
+.bulk-action-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+  margin-left: 12px;
+}
+
+.bulk-action-btn:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.bulk-action-btn:hover:before {
+  left: 0;
+}
+
+.bulk-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.bulk-action-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.bulk-action-btn.include {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.bulk-action-btn.exclude {
+  background-color: #f44336;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .bulk-actions {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 20px;
+  }
+
+  .selected-count-wrapper {
+    margin-bottom: 12px;
+    justify-content: flex-start;
+  }
+
+  .bulk-action-btn {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 8px;
+  }
+}
