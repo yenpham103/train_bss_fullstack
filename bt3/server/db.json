@@ -1,0 +1,144 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Smartphone X Pro",
+      "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 12121232121212,
+      "status": "excluded"
+    },
+    {
+      "id": "2",
+      "name": "Laptop Ultra",
+      "image": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 23232323,
+      "status": "included"
+    },
+    {
+      "id": "3",
+      "name": "Tai nghe không dây Pro",
+      "image": "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 2323,
+      "status": "excluded"
+    },
+    {
+      "id": "4",
+      "name": "Smart TV 8K",
+      "image": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 2999.99,
+      "status": "included"
+    },
+    {
+      "id": "5",
+      "name": "Máy ảnh mirrorless",
+      "image": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 2323,
+      "status": "included"
+    },
+    {
+      "id": "6",
+      "name": "Máy tính bảng Pro",
+      "image": "https://images.unsplash.com/photo-1561154464-82e9adf32764?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 799.99,
+      "status": "included"
+    },
+    {
+      "id": "7",
+      "name": "Loa thông minh AI",
+      "image": "https://images.unsplash.com/photo-1589003077984-894e133dabab?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 1212,
+      "status": "included"
+    },
+    {
+      "id": "8",
+      "name": "Máy chiếu 4K HDR",
+      "image": "https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 1599.99,
+      "status": "included"
+    },
+    {
+      "id": "9",
+      "name": "Đồng hồ thông minh Series 5",
+      "image": "https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 3991.99,
+      "status": "included"
+    },
+    {
+      "id": "10",
+      "name": "Bàn phím cơ RGB",
+      "image": "https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 149.99,
+      "status": "included"
+    },
+    {
+      "id": "11",
+      "name": "Tai nghe chống ồn cao cấp",
+      "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 203293,
+      "status": "included"
+    },
+    {
+      "id": "12",
+      "name": "Máy in 3D chuyên nghiệp",
+      "image": "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 899.99,
+      "status": "included"
+    },
+    {
+      "id": "13",
+      "name": "Drone camera 4K",
+      "image": "https://images.unsplash.com/photo-1507582020474-9a35b7d455d9?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 12232399.99,
+      "status": "included"
+    },
+    {
+      "id": "14",
+      "name": "Máy lọc không khí thông minh",
+      "image": "https://images.unsplash.com/photo-1585771724684-38269d6639fd?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 299.99,
+      "status": "included"
+    },
+    {
+      "id": "15",
+      "name": "Màn hình gaming 240Hz",
+      "image": "https://images.unsplash.com/photo-1527443154391-507e9dc6c5cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 499.99,
+      "status": "included"
+    },
+    {
+      "id": "16",
+      "name": "Bộ phát Wi-Fi Mesh",
+      "image": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 299.99,
+      "status": "included"
+    },
+    {
+      "id": "17",
+      "name": "Ổ cứng SSD 2TB",
+      "image": "https://images.unsplash.com/photo-1531492746076-161ca9bcad58?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 2.4232323232323232e+42,
+      "status": "included"
+    },
+    {
+      "id": "18",
+      "name": "Bút cảm ứng đồ họa",
+      "image": "https://images.unsplash.com/photo-1527443154391-507e9dc6c5cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 129.99,
+      "status": "included"
+    },
+    {
+      "id": "19",
+      "name": "Máy game cầm tay",
+      "image": "https://images.unsplash.com/photo-1531525645387-7f14be1bdbbd?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 399.99,
+      "status": "included"
+    },
+    {
+      "id": "20",
+      "name": "Robot hút bụi thông minh",
+      "image": "https://images.unsplash.com/photo-1527443154391-507e9dc6c5cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
+      "price": 349.99,
+      "status": "included"
+    }
+  ]
+}
