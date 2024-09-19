@@ -8,9 +8,10 @@ import {
   selectorActiveTab,
   selectorProducts,
   selectorSelectedProducts,
-  updateProductStatus,
+  // updateProductStatus,
 } from '@/slices/productsSlice';
 import { getProductsByStatus } from '@/utils/productByStatus';
+import { updateProductStatus } from '@/slices/productsThunk';
 
 function BulkActions() {
   const selectedProducts = useSelector(selectorSelectedProducts);

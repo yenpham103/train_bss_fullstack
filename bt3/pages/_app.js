@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function App({ Component, pageProps }) {
   return (
     <Provider store={store}>
-      <div className='App'>
+      <div className=''>
         <Component {...pageProps} />
         <ToastContainer />
       </div>

@@ -2,12 +2,11 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import {
-  getProducts,
+  // getProducts,
   selectorActiveTab,
   selectorCurrentPage,
   selectorStatus,
   selectorTotalPages,
-  // selectSearch,
   setActiveTab,
   setCurrentPage,
 } from '@/slices/productsSlice';
@@ -15,8 +14,9 @@ import BulkActions from '../BulkActions/BulkActions';
 import ProductList from '../ProductList/ProductList';
 import Loading from '../Loading/Loading';
 import styles from './CatalogConfig.module.css';
-import Search from '../Search/Search';
+// import Search from '../Search/Search';
 import Pagination from '../Pagination/Pagination';
+import { getProducts } from '@/slices/productsThunk';
 
 function CatalogConfig() {
   const currentPage = useSelector(selectorCurrentPage);
@@ -62,7 +62,6 @@ function CatalogConfig() {
                 </button>
               ))}
             </div>
-            <Search />
             <BulkActions />
             <ProductList />
             <Pagination

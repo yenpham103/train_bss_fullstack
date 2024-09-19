@@ -14,7 +14,6 @@ import './CatalogConfig.css';
 
 function CatalogConfig() {
   const activeTab = useSelector(selectorActiveTab);
-  // console.log(activeTab);
 
   const dispatch = useDispatch();
   const status = useSelector(selectorStatus);

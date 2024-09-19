@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import CatalogConfig from '@/components/CatalogConfig/CatalogConfig';
+import Search from '@/components/Search/Search';
 export default function Home() {
   return (
     <>
@@ -13,7 +14,8 @@ export default function Home() {
         />
       </Head>
       <div className=''>
-        <main className=''>
+        <main className='App'>
+          <Search />
           <CatalogConfig />
         </main>
       </div>

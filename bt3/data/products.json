@@ -4,8 +4,8 @@
       "id": "1",
       "name": "Smartphone X Pro",
       "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
-      "price": 349394934340,
-      "status": "excluded"
+      "price": 3948934834,
+      "status": "included"
     },
     {
       "id": "2",
@@ -19,7 +19,7 @@
       "name": "Tai nghe không dây Pro",
       "image": "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
       "price": 88,
-      "status": "excluded"
+      "status": "included"
     },
     {
       "id": "4",
@@ -32,7 +32,7 @@
       "id": "5",
       "name": "Máy ảnh mirrorless",
       "image": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
-      "price": 90,
+      "price": 4343434,
       "status": "included"
     },
     {
@@ -82,7 +82,7 @@
       "name": "Máy in 3D chuyên nghiệp",
       "image": "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
       "price": 899.99,
-      "status": "excluded"
+      "status": "included"
     },
     {
       "id": "13",
@@ -96,35 +96,35 @@
       "name": "Máy lọc không khí thông minh",
       "image": "https://images.unsplash.com/photo-1585771724684-38269d6639fd?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
       "price": 299.99,
-      "status": "excluded"
+      "status": "included"
     },
     {
       "id": "15",
       "name": "Màn hình gaming 240Hz",
       "image": "https://images.unsplash.com/photo-1527443154391-507e9dc6c5cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
       "price": 499.99,
-      "status": "excluded"
+      "status": "included"
     },
     {
       "id": "16",
       "name": "Bộ phát Wi-Fi Mesh",
       "image": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
       "price": 299.99,
-      "status": "excluded"
+      "status": "included"
     },
     {
       "id": "17",
       "name": "Ổ cứng SSD 2TB",
       "image": "https://images.unsplash.com/photo-1531492746076-161ca9bcad58?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
       "price": 249.99,
-      "status": "excluded"
+      "status": "included"
     },
     {
       "id": "18",
       "name": "Bút cảm ứng đồ họa",
       "image": "https://images.unsplash.com/photo-1527443154391-507e9dc6c5cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80",
       "price": 129.99,
-      "status": "excluded"
+      "status": "included"
     },
     {
       "id": "19",

@@ -1,55 +1,56 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import styles from './Search.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  searchProducts,
-  selectorActiveTab,
-  selectorCurrentPage,
-} from '@/slices/productsSlice';
+import { selectorActiveTab } from '@/slices/productsSlice';
 import useDebounce from '@/hooks/useDebounce';
+import { getProducts, searchProducts } from '@/slices/productsThunk';
 
 function Search() {
   const [searchTerm, setSearchTerm] = useState('');
-  const currentPage = useSelector(selectorCurrentPage);
   const activeTab = useSelector(selectorActiveTab);
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const dispatch = useDispatch();
-  const performSearch = (term) => {
-    dispatch(searchProducts({ search: term, status: activeTab, page: 1 }));
-  };
+
+  const performSearch = useCallback(
+    (term, tabStatus) => {
+      if (term.trim() !== '') {
+        dispatch(searchProducts({ search: term, status: tabStatus }));
+      } else {
+        dispatch(getProducts({ status: tabStatus }));
+      }
+    },
+    [dispatch]
+  );
+
   useEffect(() => {
-    if (debouncedSearchTerm) {
-      performSearch(debouncedSearchTerm);
-    }
-  }, [debouncedSearchTerm]);
+    performSearch(debouncedSearchTerm, activeTab);
+  }, [debouncedSearchTerm, activeTab, performSearch]);
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      performSearch(localSearchTerm);
+      performSearch(searchTerm, activeTab);
     }
   };
-  // const handleSearch = () => {
-  //   dispatch(
-  //     searchProducts({
-  //       search: searchTerm,
-  //       page: currentPage,
-  //       status: activeTab,
-  //     })
-  //   );
-  // };
+
+  const handleInputChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
   return (
-    <form className={styles.search}>
-      <input
-        type='text'
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        // onBlur={handleSearch}
-        placeholder='Search products...'
-        className={styles.searchInput}
-        onKeyDown={handleKeyDown}
-      />
-    </form>
+    <div className={styles.searchContainer}>
+      <h1 className={styles.title}>CATALOG CONFIG APP</h1>
+      <form className={styles.search}>
+        <input
+          type='text'
+          value={searchTerm}
+          onChange={handleInputChange}
+          placeholder='Search products...'
+          className={styles.searchInput}
+          onKeyDown={handleKeyDown}
+        />
+      </form>
+    </div>
   );
 }
 

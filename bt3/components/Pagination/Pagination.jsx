@@ -11,10 +11,11 @@ function Pagination({ currentPage, totalPages, onPageChange }) {
     <div className={styles.pagination}>
       {pageNumbers.map((number) => (
         <button
+          disabled={currentPage === number || totalPages === 1}
           key={number}
           onClick={() => onPageChange(number)}
           className={`${styles.pageButton} ${
-            currentPage === number ? styles.active : ''
+            currentPage === number || totalPages === 1 ? styles.active : ''
           }`}
         >
           {number}

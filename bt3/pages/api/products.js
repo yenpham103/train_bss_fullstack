@@ -6,17 +6,24 @@ export default function handler(req, res) {
 
   if (req.method === 'GET') {
     try {
-      // Đọc file JSON
+      if (!fs.existsSync(filePath)) {
+        throw new Error('Products file not found');
+      }
+
       const jsonData = fs.readFileSync(filePath, 'utf8');
       const data = JSON.parse(jsonData);
 
-      // Lấy query parameters
-      const { page = 1, limit = 8, status, search } = req.query;
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 8;
+      const { status, search } = req.query;
 
-      // Lọc sản phẩm theo status
+      if (page < 1 || limit < 1) {
+        return res.status(400).json({ error: 'Invalid page or limit value' });
+      }
+
       let filteredProducts = data.products;
       if (status && status !== 'all') {
-        filteredProducts = data.products.filter(
+        filteredProducts = filteredProducts.filter(
           (product) => product.status === status
         );
       }
@@ -25,24 +32,28 @@ export default function handler(req, res) {
         const searchLower = search.toLowerCase();
         filteredProducts = filteredProducts.filter(
           (product) =>
-            product.name.toLowerCase().includes(searchLower) ||
-            product.description.toLowerCase().includes(searchLower)
+            (product.name &&
+              product.name.toLowerCase().includes(searchLower)) ||
+            (product.description &&
+              product.description.toLowerCase().includes(searchLower))
         );
       }
 
-      const startIndex = (Number(page) - 1) * Number(limit);
-      const endIndex = startIndex + Number(limit);
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + limit;
       const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
 
       res.status(200).json({
         products: paginatedProducts,
-        totalPages: Math.ceil(filteredProducts.length / Number(limit)),
-        currentPage: Number(page),
+        totalPages: Math.ceil(filteredProducts.length / limit),
+        currentPage: page,
         totalItems: filteredProducts.length,
       });
     } catch (error) {
       console.error('Error fetching products:', error);
-      res.status(500).json({ error: 'Unable to fetch products' });
+      res
+        .status(500)
+        .json({ error: 'Unable to fetch products', details: error.message });
     }
   } else if (req.method === 'PATCH') {
     try {

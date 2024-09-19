@@ -8,10 +8,11 @@ import {
   selectorProducts,
   selectorSelectedProducts,
   setSelectedProduct,
-  updateProductPrice,
+  // updateProductPrice,
 } from '@/slices/productsSlice';
 import styles from './ProductList.module.css';
 import Image from 'next/image';
+import { updateProductPrice } from '@/slices/productsThunk';
 
 function ProductList() {
   const products = useSelector(selectorProducts);
