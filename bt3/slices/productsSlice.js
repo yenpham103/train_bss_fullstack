@@ -2,7 +2,7 @@ import { getProductsByStatus } from '@/utils/productByStatus';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 const apiUrl = 'http://localhost:3000/api/products';
-const ITEMS_PER_PAGE = 10;
+// const ITEMS_PER_PAGE = 10;
 
 //Slice
 export const productsSlice = createSlice({
@@ -52,16 +52,6 @@ export const productsSlice = createSlice({
     setCurrentPage: (state, action) => {
       state.currentPage = action.payload;
     },
-    setSearch: (state, action) => {
-      state.search = action.payload;
-      state.currentPage = 1;
-      state.filteredProducts = state.products.filter((product) =>
-        product.name.toLowerCase().includes(action.payload.toLowerCase())
-      );
-      state.totalPages = Math.ceil(
-        state.filteredProducts.length / ITEMS_PER_PAGE
-      );
-    },
     setActiveTab: (state, action) => {
       state.activeTab = action.payload;
     },
@@ -74,7 +64,6 @@ export const productsSlice = createSlice({
     builder.addCase(getProducts.fulfilled, (state, action) => {
       state.status = 'fulfilled';
       state.products = action.payload.products;
-      state.filteredProducts = action.payload.products;
       state.currentPage = action.payload.currentPage;
       state.totalPages = action.payload.totalPages;
       state.totalItems = action.payload.totalItems;
@@ -110,17 +99,31 @@ export const productsSlice = createSlice({
     });
     builder.addCase(updateProductPrice.fulfilled, (state, action) => {
       state.status = 'fulfilled';
-      state.products = state.products.map((product) => {
-        if (product.id === action.payload.id) {
-          return {
-            ...product,
-            price: action.payload.price,
-          };
-        }
-        return product;
-      });
+      const updatedProduct = action.payload.product;
+      const index = state.products.findIndex((p) => p.id === updatedProduct.id);
+      if (index !== -1) {
+        state.products[index] = {
+          ...state.products[index],
+          ...updatedProduct,
+        };
+      }
     });
     builder.addCase(updateProductPrice.rejected, (state) => {
+      state.status = 'rejected';
+    });
+
+    //Search
+    builder.addCase(searchProducts.pending, (state) => {
+      state.status = 'pending';
+    });
+    builder.addCase(searchProducts.fulfilled, (state, action) => {
+      state.status = 'fulfilled';
+      state.products = action.payload.products;
+      state.currentPage = action.payload.currentPage;
+      state.totalPages = action.payload.totalPages;
+      state.totalItems = action.payload.totalItems;
+    });
+    builder.addCase(searchProducts.rejected, (state) => {
       state.status = 'rejected';
     });
   },
@@ -130,7 +133,6 @@ export const {
   selectAllProducts,
   deselectAllProducts,
   setCurrentPage,
-  setSearch,
   setActiveTab,
 } = productsSlice.actions;
 
@@ -151,7 +153,6 @@ export const getProducts = createAsyncThunk(
           'X-Api-Key': apiKey,
         },
       });
-
       if (!response.ok) {
         throw new Error(
           `Failed to fetch products: ${response.status} ${response.statusText}`
@@ -159,6 +160,8 @@ export const getProducts = createAsyncThunk(
       }
 
       const data = await response.json();
+      console.log(data);
+
       return {
         products: data.products,
         totalPages: data.totalPages,
@@ -171,40 +174,10 @@ export const getProducts = createAsyncThunk(
     }
   }
 );
-//updateProductStatus
-// export const updateProductStatus = createAsyncThunk(
-//   'products/updateProductStatus',
-//   async ({ ids, status }, { rejectWithValue }) => {
-//     try {
-//       const updatePromises = ids.map((id) =>
-//         fetch(`${apiUrl}/products/${id}`, {
-//           method: 'PATCH',
-//           headers: {
-//             'Content-Type': 'application/json',
-//           },
-//           body: JSON.stringify({ status }),
-//         }).then((response) => {
-//           if (!response.ok) {
-//             throw new Error(`Failed to update product ${id}`);
-//           }
-//           return response.json();
-//         })
-//       );
-//       const updatedProducts = await Promise.all(updatePromises);
-//       toast.success(
-//         `${ids.length} products updated to ${status} successfully!`
-//       );
-//       return updatedProducts;
-//     } catch (error) {
-//       toast.error(`Failed to update products: ${error.message}`);
-//       return rejectWithValue(error.message);
-//     }
-//   }
-// );
 
 export const updateProductStatus = createAsyncThunk(
   'products/updateProductStatus',
-  async ({ ids, status }, { rejectWithValue }) => {
+  async ({ ids, status }, { dispatch, getState, rejectWithValue }) => {
     const apiKey = process.env.NEXT_PUBLIC_API_KEY;
     if (!apiKey) {
       toast.error('API Key is not configured');
@@ -212,27 +185,44 @@ export const updateProductStatus = createAsyncThunk(
     }
 
     try {
-      const updatePromises = ids.map((id) => {
-        return fetch('/api/products', {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Request-Time': Date.now().toString(),
-            'X-Api-Key': apiKey,
-          },
-          body: JSON.stringify({ id, status }),
-        }).then((response) => {
+      const updatePromises = ids.map(async (id) => {
+        try {
+          const response = await fetch('/api/products', {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Request-Time': Date.now().toString(),
+              'X-Api-Key': apiKey,
+            },
+            body: JSON.stringify({ id, status }),
+          });
+
           if (!response.ok) {
             throw new Error(`Failed to update product ${id}`);
           }
-          return response.json();
-        });
+
+          return await response.json();
+        } catch (error) {
+          console.error(`Error updating product ${id}:`, error);
+        }
       });
 
       const updatedProducts = await Promise.all(updatePromises);
       toast.success(
         `${ids.length} products updated to ${status} successfully!`
       );
+
+      // Dispatch để tải lại dữ liệu
+      const currentState = getState().products;
+      console.log(currentState);
+
+      dispatch(
+        getProducts({
+          page: currentState.currentPage,
+          status: currentState.activeTab,
+        })
+      );
+
       return updatedProducts;
     } catch (error) {
       toast.error(`Failed to update products: ${error.message}`);
@@ -244,19 +234,66 @@ export const updateProductStatus = createAsyncThunk(
 export const updateProductPrice = createAsyncThunk(
   'products/updateProductPrice',
   async ({ id, price }, { rejectWithValue }) => {
+    console.log(id, price);
+
+    const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+    if (!apiKey) {
+      toast.error('API Key is not configured');
+      return rejectWithValue('API Key is missing in .env file');
+    }
+
     try {
-      const response = await fetch(`${apiUrl}/products/${id}`, {
+      const response = await fetch('/api/products', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
+          'X-Request-Time': Date.now().toString(),
+          'X-Api-Key': apiKey,
         },
-        body: JSON.stringify({ price }),
+        body: JSON.stringify({ id, price }),
       });
+
       if (!response.ok) {
         throw new Error(`Failed to update product ${id}`);
       }
+      toast.success(`Product ${id} updated price successfully!`);
+      const updatedProduct = await response.json();
+
+      return updatedProduct;
+    } catch (error) {
+      toast.error(`Failed to update product price: ${error.message}`);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const searchProducts = createAsyncThunk(
+  'products/searchProducts',
+  async ({ search, page = 1, status = 'all' }, { rejectWithValue }) => {
+    try {
+      const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+      if (!apiKey) {
+        throw new Error('API key is not defined');
+      }
+      const response = await fetch(
+        `${apiUrl}?page=${page}&status=${status}&search=${encodeURIComponent(
+          search.trim()
+        )}`,
+        {
+          headers: {
+            'X-Request-Time': Date.now().toString(),
+            'X-Api-Key': apiKey,
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(
+          `Failed to search products: ${response.status} ${response.statusText}`
+        );
+      }
       return await response.json();
     } catch (error) {
+      console.error('Error in searchProducts:', error);
       return rejectWithValue(error.message);
     }
   }
@@ -267,6 +304,7 @@ export const selectorProducts = (state) => state.products.products;
 export const selectorStatus = (state) => state.products.status;
 export const selectorSelectedProducts = (state) =>
   state.products.selectedProducts;
-export const selectCurrentPage = (state) => state.products.currentPage;
-export const selectSearch = (state) => state.products.search;
+export const selectorCurrentPage = (state) => state.products.currentPage;
+export const selectorSearch = (state) => state.products.search;
 export const selectorActiveTab = (state) => state.products.activeTab;
+export const selectorTotalPages = (state) => state.products.totalPages;

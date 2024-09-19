@@ -3,11 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import {
   getProducts,
-  selectCurrentPage,
   selectorActiveTab,
+  selectorCurrentPage,
   selectorStatus,
-  selectSearch,
-  selectTotalPages,
+  selectorTotalPages,
+  // selectSearch,
   setActiveTab,
   setCurrentPage,
 } from '@/slices/productsSlice';
@@ -19,10 +19,10 @@ import Search from '../Search/Search';
 import Pagination from '../Pagination/Pagination';
 
 function CatalogConfig() {
-  const currentPage = useSelector(selectCurrentPage);
-  const search = useSelector(selectSearch);
+  const currentPage = useSelector(selectorCurrentPage);
   const activeTab = useSelector(selectorActiveTab);
   const dispatch = useDispatch();
+  const totalPages = useSelector(selectorTotalPages);
   const status = useSelector(selectorStatus);
 
   useEffect(() => {
@@ -34,10 +34,7 @@ function CatalogConfig() {
   };
   const handleTabAction = (tab) => {
     dispatch(setActiveTab(tab));
-  };
-
-  const handleSearch = (searchTerm) => {
-    dispatch(searchProducts({ search: searchTerm, status: activeTab }));
+    dispatch(setCurrentPage(1));
   };
 
   const tabs = ['all', 'included', 'excluded'];
@@ -65,12 +62,12 @@ function CatalogConfig() {
                 </button>
               ))}
             </div>
-            <Search onSearch={handleSearch} />
+            <Search />
             <BulkActions />
             <ProductList />
             <Pagination
               currentPage={currentPage}
-              totalPages={3}
+              totalPages={totalPages}
               onPageChange={handlePageChange}
             />
           </div>

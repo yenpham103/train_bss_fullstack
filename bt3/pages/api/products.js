@@ -11,19 +11,34 @@ export default function handler(req, res) {
       const data = JSON.parse(jsonData);
 
       // Lấy query parameters
-      const { page = 1, limit = 8 } = req.query;
+      const { page = 1, limit = 8, status, search } = req.query;
 
-      // Phân trang
+      // Lọc sản phẩm theo status
+      let filteredProducts = data.products;
+      if (status && status !== 'all') {
+        filteredProducts = data.products.filter(
+          (product) => product.status === status
+        );
+      }
+
+      if (search) {
+        const searchLower = search.toLowerCase();
+        filteredProducts = filteredProducts.filter(
+          (product) =>
+            product.name.toLowerCase().includes(searchLower) ||
+            product.description.toLowerCase().includes(searchLower)
+        );
+      }
+
       const startIndex = (Number(page) - 1) * Number(limit);
       const endIndex = startIndex + Number(limit);
-      const paginatedProducts = data.products.slice(startIndex, endIndex);
+      const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
 
-      // Trả về kết quả
       res.status(200).json({
         products: paginatedProducts,
-        totalPages: Math.ceil(data.products.length / Number(limit)),
+        totalPages: Math.ceil(filteredProducts.length / Number(limit)),
         currentPage: Number(page),
-        totalItems: data.products.length,
+        totalItems: filteredProducts.length,
       });
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -37,11 +52,9 @@ export default function handler(req, res) {
         return res.status(400).json({ error: 'Product ID is required' });
       }
 
-      // Đọc file JSON
       const jsonData = fs.readFileSync(filePath, 'utf8');
       const data = JSON.parse(jsonData);
 
-      // Tìm sản phẩm cần cập nhật
       const productIndex = data.products.findIndex(
         (product) => product.id === id
       );
@@ -50,7 +63,6 @@ export default function handler(req, res) {
         return res.status(404).json({ error: 'Product not found' });
       }
 
-      // Cập nhật trạng thái và/hoặc giá
       if (status !== undefined) {
         data.products[productIndex].status = status;
       }
@@ -58,15 +70,12 @@ export default function handler(req, res) {
         data.products[productIndex].price = price;
       }
 
-      // Ghi lại vào file
       fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 
-      res
-        .status(200)
-        .json({
-          message: 'Product updated successfully',
-          product: data.products[productIndex],
-        });
+      res.status(200).json({
+        message: 'Product updated successfully',
+        product: data.products[productIndex],
+      });
     } catch (error) {
       console.error('Error updating product:', error);
       res.status(500).json({ error: 'Unable to update product' });

@@ -51,11 +51,6 @@ function ProductList() {
       if (!isNaN(newPrice) && newPrice >= 0) {
         if (newPrice !== currentProduct.price) {
           dispatch(updateProductPrice({ id, price: newPrice }));
-          toast.success(
-            `Price for product ${id} has been updated to $${newPrice.toFixed(
-              2
-            )}.`
-          );
         }
       } else {
         toast.error('Invalid price. Please enter a valid number.');
