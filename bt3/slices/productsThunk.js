@@ -1,25 +1,47 @@
 //Fetch Api
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { parseCookies } from 'nookies';
 import { toast } from 'react-toastify';
-const apiUrl = 'http://localhost:3000/api/products';
+import { setError } from './productsSlice';
+const apiUrl = 'http://localhost:8080';
 //getProducts
+
 export const getProducts = createAsyncThunk(
   'products/getProducts',
-  async ({ page = 1, status = 'all' }, { rejectWithValue }) => {
+  async (
+    { page = 1, limit = 8, status = 'all' },
+    { dispatch, rejectWithValue }
+  ) => {
     try {
-      const apiKey = process.env.NEXT_PUBLIC_API_KEY;
-      if (!apiKey) {
-        throw new Error('API key is not defined');
+      const cookies = parseCookies();
+      const accessToken = cookies.accessToken;
+
+      if (!accessToken) {
+        throw new Error('Access token not found');
       }
-      const response = await fetch(`${apiUrl}?page=${page}&status=${status}`, {
-        headers: {
-          'X-Request-Time': Date.now().toString(),
-          'X-Api-Key': apiKey,
-        },
+
+      const queryParams = new URLSearchParams({
+        page: page.toString(),
+        limit: limit.toString(),
+        status,
       });
+
+      const response = await fetch(
+        `${apiUrl}/products?${queryParams.toString()}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
       if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
         throw new Error(
-          `Failed to fetch products: ${response.status} ${response.statusText}`
+          errorData.message ||
+            `Failed to fetch products: ${response.status} ${response.statusText}`
         );
       }
 
@@ -32,8 +54,8 @@ export const getProducts = createAsyncThunk(
         totalItems: data.totalItems,
       };
     } catch (error) {
-      console.error('Error in getProducts:', error);
-      return rejectWithValue(error.message);
+      dispatch(setError(error.message));
+      return rejectWithValue(error);
     }
   }
 );
@@ -41,21 +63,23 @@ export const getProducts = createAsyncThunk(
 export const updateProductStatus = createAsyncThunk(
   'products/updateProductStatus',
   async ({ ids, status }, { dispatch, getState, rejectWithValue }) => {
-    const apiKey = process.env.NEXT_PUBLIC_API_KEY;
-    if (!apiKey) {
-      toast.error('API Key is not configured');
-      return rejectWithValue('API Key is missing in .env file');
-    }
-
     try {
+      // Lấy accessToken từ cookie
+      const cookies = parseCookies();
+      const accessToken = cookies.accessToken;
+      console.log(accessToken);
+
+      if (!accessToken) {
+        throw new Error('Access token not found');
+      }
+
       const updatePromises = ids.map(async (id) => {
         try {
-          const response = await fetch('/api/products', {
+          const response = await fetch(`${apiUrl}/products`, {
             method: 'PATCH',
             headers: {
+              Authorization: `Bearer ${accessToken}`,
               'Content-Type': 'application/json',
-              'X-Request-Time': Date.now().toString(),
-              'X-Api-Key': apiKey,
             },
             body: JSON.stringify({ id, status }),
           });
@@ -96,19 +120,20 @@ export const updateProductStatus = createAsyncThunk(
 export const updateProductPrice = createAsyncThunk(
   'products/updateProductPrice',
   async ({ id, price }, { rejectWithValue }) => {
-    const apiKey = process.env.NEXT_PUBLIC_API_KEY;
-    if (!apiKey) {
-      toast.error('API Key is not configured');
-      return rejectWithValue('API Key is missing in .env file');
+    // Lấy accessToken từ cookie
+    const cookies = parseCookies();
+    const accessToken = cookies.accessToken;
+
+    if (!accessToken) {
+      throw new Error('Access token not found');
     }
 
     try {
-      const response = await fetch('/api/products', {
+      const response = await fetch(`${apiUrl}/products/price`, {
         method: 'PATCH',
         headers: {
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
-          'X-Request-Time': Date.now().toString(),
-          'X-Api-Key': apiKey,
         },
         body: JSON.stringify({ id, price }),
       });
@@ -131,18 +156,20 @@ export const searchProducts = createAsyncThunk(
   'products/searchProducts',
   async ({ search, status = 'all' }, { rejectWithValue }) => {
     try {
-      const apiKey = process.env.NEXT_PUBLIC_API_KEY;
-      if (!apiKey) {
-        throw new Error('API key is not defined');
+      const cookies = parseCookies();
+      const accessToken = cookies.accessToken;
+
+      if (!accessToken) {
+        throw new Error('Access token not found');
       }
       const response = await fetch(
-        `${apiUrl}?status=${status}&search=${encodeURIComponent(
+        `${apiUrl}/products?status=${status}&search=${encodeURIComponent(
           search.trim()
         )}`,
         {
           headers: {
-            'X-Request-Time': Date.now().toString(),
-            'X-Api-Key': apiKey,
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
           },
         }
       );

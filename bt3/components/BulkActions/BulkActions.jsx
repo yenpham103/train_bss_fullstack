@@ -26,17 +26,17 @@ function BulkActions() {
 
   const isAllChecked = useMemo(
     () =>
-      productsInActiveTab.length > 0 &&
-      productsInActiveTab.every((product) =>
-        selectedProducts.includes(product.id)
+      productsInActiveTab?.length > 0 &&
+      productsInActiveTab?.every((product) =>
+        selectedProducts?.includes(product.id)
       ),
     [productsInActiveTab, selectedProducts]
   );
 
   const selectedProductsInTabCount = useMemo(
     () =>
-      productsInActiveTab.filter((product) =>
-        selectedProducts.includes(product.id)
+      productsInActiveTab?.filter((product) =>
+        selectedProducts?.includes(product.id)
       ).length,
     [productsInActiveTab, selectedProducts]
   );
@@ -63,7 +63,7 @@ function BulkActions() {
 
   return (
     <div className={styles['bulk-actions']}>
-      {productsInActiveTab.length > 0 ? (
+      {productsInActiveTab?.length > 0 ? (
         <div className={styles['bulk-actions-header']}>
           <div className={styles['selected-count-wrapper']}>
             <input

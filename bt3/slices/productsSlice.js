@@ -19,6 +19,7 @@ export const productsSlice = createSlice({
     totalPages: 1,
     search: '',
     activeTab: 'all',
+    error: '',
   },
   reducers: {
     // Dùng khi không phải tác vụ bất đồng bộ
@@ -58,6 +59,11 @@ export const productsSlice = createSlice({
     },
     setActiveTab: (state, action) => {
       state.activeTab = action.payload;
+    },
+    setError: (state, action) => {
+      console.log(action.payload);
+
+      state.error = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -139,6 +145,7 @@ export const {
   deselectAllProducts,
   setCurrentPage,
   setActiveTab,
+  setError,
 } = productsSlice.actions;
 
 //Selector
@@ -150,3 +157,4 @@ export const selectorCurrentPage = (state) => state.products.currentPage;
 export const selectorSearch = (state) => state.products.search;
 export const selectorActiveTab = (state) => state.products.activeTab;
 export const selectorTotalPages = (state) => state.products.totalPages;
+export const selectorError = (state) => state.products.error;

@@ -24,7 +24,7 @@ function ProductList() {
   const [tempPrice, setTempPrice] = useState('');
   const priceInputRef = useRef(null);
 
-  const filteredProducts = products.filter((product) => {
+  const filteredProducts = products?.filter((product) => {
     if (currentActiveTab === 'all') return true;
     if (currentActiveTab === 'included') return product.status === 'included';
     if (currentActiveTab === 'excluded') return product.status === 'excluded';
@@ -72,10 +72,10 @@ function ProductList() {
     <div
       className={clsx(
         styles['product-list'],
-        filteredProducts.length === 1 && styles['single-product']
+        filteredProducts?.length === 1 && styles['single-product']
       )}
     >
-      {filteredProducts.map((product) => (
+      {filteredProducts?.map((product) => (
         <div key={product.id} className={styles['product-item']}>
           <input
             type='checkbox'

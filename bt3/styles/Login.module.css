@@ -1,0 +1,124 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #e3f2fd;
+  background-image: radial-gradient(
+      at 47% 33%,
+      hsl(200, 100%, 85%) 0,
+      transparent 59%
+    ),
+    radial-gradient(at 82% 65%, hsl(218, 100%, 85%) 0, transparent 55%);
+}
+
+.main {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.formWrapper {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(10px);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 2.25rem;
+  color: #01579b;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #0277bd;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.inputGroup {
+  margin-bottom: 1.5rem;
+}
+
+.inputGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #01579b;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.inputGroup input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #b3e5fc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #e1f5fe;
+}
+
+.inputGroup input:focus {
+  outline: none;
+  border-color: #039be5;
+  box-shadow: 0 0 0 3px rgba(3, 155, 229, 0.15);
+  background-color: #fff;
+}
+
+.button {
+  padding: 0.75rem;
+  background-color: #0288d1;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.button:hover {
+  background-color: #0277bd;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(2, 136, 209, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.error {
+  color: #d32f2f;
+  text-align: center;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background-color: #ffebee;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  border: 1px solid #ffcdd2;
+}
+
+@media (max-width: 600px) {
+  .formWrapper {
+    padding: 2rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 0.875rem;
+  }
+}
