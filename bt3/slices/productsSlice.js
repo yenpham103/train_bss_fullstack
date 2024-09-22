@@ -61,8 +61,6 @@ export const productsSlice = createSlice({
       state.activeTab = action.payload;
     },
     setError: (state, action) => {
-      console.log(action.payload);
-
       state.error = action.payload;
     },
   },
@@ -109,7 +107,7 @@ export const productsSlice = createSlice({
     });
     builder.addCase(updateProductPrice.fulfilled, (state, action) => {
       state.status = 'fulfilled';
-      const updatedProduct = action.payload.product;
+      const updatedProduct = action.payload;
       const index = state.products.findIndex((p) => p.id === updatedProduct.id);
       if (index !== -1) {
         state.products[index] = {
@@ -127,7 +125,6 @@ export const productsSlice = createSlice({
       state.status = 'pending';
     });
     builder.addCase(searchProducts.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.status = 'fulfilled';
       state.products = action.payload.products;
       // state.currentPage = action.payload.currentPage;

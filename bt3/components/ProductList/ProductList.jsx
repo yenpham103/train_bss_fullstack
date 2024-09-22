@@ -37,7 +37,7 @@ function ProductList() {
 
   const startEditing = (id, price) => {
     setEditingPrice(id);
-    setTempPrice(price.toFixed(2));
+    setTempPrice(price);
   };
 
   const handlePriceChange = (e) => {
@@ -49,9 +49,15 @@ function ProductList() {
       e.preventDefault();
       const newPrice = parseFloat(tempPrice);
       const currentProduct = products.find((product) => product.id === id);
+
       if (!isNaN(newPrice) && newPrice >= 0) {
-        if (newPrice !== currentProduct.price) {
+        const oldPrice = parseFloat(currentProduct.price);
+
+        if (newPrice !== oldPrice) {
           dispatch(updateProductPrice({ id, price: newPrice }));
+          toast.success('Price updated successfully.');
+        } else {
+          toast.info('No change in price.');
         }
       } else {
         toast.error('Invalid price. Please enter a valid number.');
@@ -111,7 +117,7 @@ function ProductList() {
               className={styles['product-price']}
               onClick={() => startEditing(product.id, product.price)}
             >
-              {formatUSD(product.price.toFixed(2))}
+              {formatUSD(product.price)}
             </span>
           )}
           <span className={styles['product-status']}>

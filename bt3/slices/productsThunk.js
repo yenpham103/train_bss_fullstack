@@ -64,54 +64,43 @@ export const updateProductStatus = createAsyncThunk(
   'products/updateProductStatus',
   async ({ ids, status }, { dispatch, getState, rejectWithValue }) => {
     try {
-      // Lấy accessToken từ cookie
       const cookies = parseCookies();
       const accessToken = cookies.accessToken;
-      console.log(accessToken);
 
       if (!accessToken) {
         throw new Error('Access token not found');
       }
 
       const updatePromises = ids.map(async (id) => {
-        try {
-          const response = await fetch(`${apiUrl}/products`, {
-            method: 'PATCH',
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ id, status }),
-          });
+        const response = await fetch(`${apiUrl}/products/${id}/status`, {
+          method: 'PATCH',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ status }),
+        });
 
-          if (!response.ok) {
-            throw new Error(`Failed to update product ${id}`);
-          }
-
-          return await response.json();
-        } catch (error) {
-          console.error(`Error updating product ${id}:`, error);
+        if (!response.ok) {
+          throw new Error(`Failed to update product ${id}`);
         }
+
+        return response.json();
       });
 
       const updatedProducts = await Promise.all(updatePromises);
+
       toast.success(
         `${ids.length} products updated to ${status} successfully!`
       );
 
-      // Dispatch để tải lại dữ liệu
-      const currentState = getState().products;
-
-      dispatch(
-        getProducts({
-          page: currentState.currentPage,
-          status: currentState.activeTab,
-        })
-      );
+      // Reload data
+      const { currentPage, activeTab } = getState().products;
+      dispatch(getProducts({ page: currentPage, status: activeTab }));
 
       return updatedProducts;
     } catch (error) {
-      toast.error(`Failed to update products: ${error.message}`);
+      toast.error(`Failed to update products status: ${error.message}`);
       return rejectWithValue(error.message);
     }
   }
@@ -119,34 +108,48 @@ export const updateProductStatus = createAsyncThunk(
 //updateProductPrice
 export const updateProductPrice = createAsyncThunk(
   'products/updateProductPrice',
-  async ({ id, price }, { rejectWithValue }) => {
-    // Lấy accessToken từ cookie
+  async ({ id, price }, { dispatch, getState, rejectWithValue }) => {
     const cookies = parseCookies();
     const accessToken = cookies.accessToken;
 
     if (!accessToken) {
       throw new Error('Access token not found');
     }
-
     try {
-      const response = await fetch(`${apiUrl}/products/price`, {
+      if (!id || typeof id !== 'number') {
+        throw new Error('Invalid product ID');
+      }
+
+      if (typeof price !== 'number' || price < 0) {
+        throw new Error('Invalid price. Price must be a non-negative number');
+      }
+
+      const response = await fetch(`${apiUrl}/products/${id}/price`, {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id, price }),
+        body: JSON.stringify({ price }),
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to update product ${id}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.error ||
+            `Failed to update product ${id}. Status: ${response.status}`
+        );
       }
-      toast.success(`Product ${id} updated price successfully!`);
+
       const updatedProduct = await response.json();
+
+      // Reload data
+      const { currentPage, activeTab } = getState().products;
+      dispatch(getProducts({ page: currentPage, status: activeTab }));
 
       return updatedProduct;
     } catch (error) {
-      toast.error(`Failed to update product price: ${error.message}`);
+      dispatch(setError(error.message));
       return rejectWithValue(error.message);
     }
   }

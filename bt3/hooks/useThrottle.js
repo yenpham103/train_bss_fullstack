@@ -1,4 +1,4 @@
-const { useCallback, useRef } = require('react');
+import { useRef, useCallback } from 'react';
 
 export const useThrottle = (callback, delay) => {
   const lastRan = useRef(Date.now());

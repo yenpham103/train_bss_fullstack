@@ -8,7 +8,7 @@ module.exports = {
     database: DB_DATABASE,
     host: DB_HOST,
     dialect: DB_DRIVER,
-    logging: true,
+    logging: false,
   },
   test: {
     username: 'root',

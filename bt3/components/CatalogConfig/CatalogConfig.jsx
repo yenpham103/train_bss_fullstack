@@ -17,6 +17,7 @@ import styles from './CatalogConfig.module.css';
 import Pagination from '../Pagination/Pagination';
 import { getProducts } from '@/slices/productsThunk';
 import { useThrottle } from '@/hooks/useThrottle';
+import { useRouter } from 'next/router';
 const TABS = ['all', 'included', 'excluded'];
 
 function CatalogConfig() {
@@ -25,9 +26,8 @@ function CatalogConfig() {
   const dispatch = useDispatch();
   const totalPages = useSelector(selectorTotalPages);
   const status = useSelector(selectorStatus);
-  const [retryDisabled, setRetryDisabled] = useState(true);
   const error = useSelector(selectorError);
-  console.log(status);
+  const router = useRouter();
 
   const throttledGetProducts = useThrottle(
     (page, tab) => dispatch(getProducts({ page, limit: 8, status: tab })),
@@ -53,37 +53,21 @@ function CatalogConfig() {
     [dispatch]
   );
 
-  // setTimeout(() => {
-  //   setRetryDisabled(true);
-  // }, 1000);
-
-  // useEffect(() => {
-  //   if (status === 'rejected') {
-  //     const timer = setTimeout(() => {
-  //       setRetryDisabled(false);
-  //     }, 1000);
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [status]);
-
-  const handleRetry = useCallback(() => {
-    throttledGetProducts(currentPage, activeTab);
-  }, [throttledGetProducts, currentPage, activeTab]);
+  const handleReload = () => {
+    router.reload();
+  };
 
   if (status === 'rejected') {
     return (
       <div className={styles.errorContainer}>
         <h2 className={styles.error}>{error}</h2>
-        <button
-          onClick={handleRetry}
-          className={styles.retryButton}
-          disabled={retryDisabled}
-        >
+        <button onClick={handleReload} className={styles.retryButton}>
           Thử lại
         </button>
       </div>
     );
   }
+
   return (
     <>
       {status === 'pending' ? (

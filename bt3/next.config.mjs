@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   images: {
     domains: ['images.unsplash.com'],
   },
@@ -8,9 +8,6 @@ const nextConfig = {
     API_KEY: process.env.API_KEY,
     API_URL: process.env.API_URL,
   },
-  // publicRuntimeConfig: {
-  //   API_KEY: process.env.NEXT_PUBLIC_API_KEY,
-  // },
 };
 
 export default nextConfig;

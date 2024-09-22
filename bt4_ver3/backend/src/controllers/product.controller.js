@@ -40,7 +40,8 @@ exports.getAllProducts = async (ctx) => {
 
 exports.updateProductStatus = async (ctx) => {
   try {
-    const { id, status } = ctx.request.body;
+    const { id } = ctx.params;
+    const { status } = ctx.request.body;
     const userId = ctx.state.user.id;
 
     const product = await Product.findOne({ where: { id, user_id: userId } });
@@ -63,10 +64,14 @@ exports.updateProductStatus = async (ctx) => {
 
 exports.updateProductPrice = async (ctx) => {
   try {
-    const { id, price } = ctx.request.body;
+    const { id } = ctx.params;
+    const { price } = ctx.request.body;
+
     const userId = ctx.state.user.id;
 
-    const product = await Product.findOne({ where: { id, user_id: userId } });
+    const product = await Product.findOne({
+      where: { id, user_id: userId },
+    });
 
     if (!product) {
       ctx.status = 404;
