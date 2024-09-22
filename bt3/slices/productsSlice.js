@@ -125,9 +125,9 @@ export const productsSlice = createSlice({
       state.status = 'pending';
     });
     builder.addCase(searchProducts.fulfilled, (state, action) => {
+      console.log(action.payload);
       state.status = 'fulfilled';
       state.products = action.payload.products;
-      // state.currentPage = action.payload.currentPage;
       state.totalPages = action.payload.totalPages;
       state.totalItems = action.payload.totalItems;
     });

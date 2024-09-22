@@ -157,7 +157,7 @@ export const updateProductPrice = createAsyncThunk(
 
 export const searchProducts = createAsyncThunk(
   'products/searchProducts',
-  async ({ search, status = 'all' }, { rejectWithValue }) => {
+  async ({ search = '', status = 'all' }, { rejectWithValue }) => {
     try {
       const cookies = parseCookies();
       const accessToken = cookies.accessToken;
@@ -165,25 +165,25 @@ export const searchProducts = createAsyncThunk(
       if (!accessToken) {
         throw new Error('Access token not found');
       }
-      const response = await fetch(
-        `${apiUrl}/products?status=${status}&search=${encodeURIComponent(
-          search.trim()
-        )}`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+
+      const queryParams = new URLSearchParams({
+        status,
+        search: search.trim(),
+      }).toString();
+
+      const response = await fetch(`${apiUrl}/products/search?${queryParams}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(
-          `${errorData.error}: ${errorData.details || 'No additional details'}`
-        );
+        throw new Error(errorData.error || 'An error occurred');
       }
-      const data = await response.json();
-      return data;
+
+      return await response.json();
     } catch (error) {
       console.error('Error in searchProducts:', error);
       return rejectWithValue(error.message);

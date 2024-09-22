@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback, useState } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import {
@@ -16,7 +16,6 @@ import Loading from '../Loading/Loading';
 import styles from './CatalogConfig.module.css';
 import Pagination from '../Pagination/Pagination';
 import { getProducts } from '@/slices/productsThunk';
-import { useThrottle } from '@/hooks/useThrottle';
 import { useRouter } from 'next/router';
 const TABS = ['all', 'included', 'excluded'];
 
@@ -29,14 +28,9 @@ function CatalogConfig() {
   const error = useSelector(selectorError);
   const router = useRouter();
 
-  const throttledGetProducts = useThrottle(
-    (page, tab) => dispatch(getProducts({ page, limit: 8, status: tab })),
-    500
-  );
-
   useEffect(() => {
-    throttledGetProducts(currentPage, activeTab);
-  }, [throttledGetProducts, currentPage, activeTab]);
+    dispatch(getProducts({ page: currentPage, limit: 8, status: activeTab }));
+  }, [dispatch, currentPage, activeTab]);
 
   const handlePageChange = useCallback(
     (page) => {

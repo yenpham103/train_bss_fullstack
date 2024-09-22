@@ -91,31 +91,36 @@ exports.updateProductPrice = async (ctx) => {
 
 exports.searchProducts = async (ctx) => {
   try {
-    const { search, status = 'all' } = ctx.query;
+    const { search = '', status = 'all' } = ctx.request.query;
     const userId = ctx.state.user.id;
 
     let whereClause = { user_id: userId };
 
-    if (status !== 'all') {
-      whereClause.status = status;
+    if (search) {
+      whereClause.name = { [Op.iLike]: `%${search}%` };
     }
 
-    if (search) {
-      whereClause[Op.or] = [
-        { name: { [Op.iLike]: `%${search}%` } },
-        { description: { [Op.iLike]: `%${search}%` } },
-      ];
+    if (status === 'included') {
+      whereClause.status = 'included';
+    } else if (status === 'excluded') {
+      whereClause.status = 'excluded';
     }
 
     const products = await Product.findAll({
       where: whereClause,
-      order: [['createdAt', 'DESC']],
+      order: [['created_at', 'DESC']],
     });
 
-    ctx.body = products;
+    ctx.body = {
+      status: 'success',
+      products: products,
+    };
   } catch (error) {
     console.error('Error in searchProducts:', error);
     ctx.status = 500;
-    ctx.body = { error: 'Internal server error' };
+    ctx.body = {
+      status: 'error',
+      message: 'Internal server error',
+    };
   }
 };
