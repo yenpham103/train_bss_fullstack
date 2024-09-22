@@ -1,6 +1,6 @@
 const { User } = require('../models');
 
-exports.getAllProducts = async (ctx) => {
+exports.getUsers = async (ctx) => {
   try {
     const users = await User.findAll();
     ctx.body = users;

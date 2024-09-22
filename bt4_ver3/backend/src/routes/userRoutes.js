@@ -4,8 +4,6 @@ const userController = require('../controllers/user.controller');
 
 const router = new Router({ prefix: '/users' });
 
-router.get('/', userController.getAllProducts);
-// router.post('/', authMiddleware, productController.createProduct);
-// Thêm các route khác
+router.get('/', userController.getUsers);
 
 module.exports = router;
