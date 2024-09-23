@@ -57,21 +57,17 @@ exports.updateProductStatus = async (ctx) => {
     ctx.body = product;
   } catch (error) {
     console.error('Error in updateProductStatus:', error);
-    ctx.status = 500;
-    ctx.body = { error: 'Internal server error' };
+    ctx.status = error.status || 500;
+    ctx.body = { error: error.message || 'Internal server error' };
   }
 };
-
 exports.updateProductPrice = async (ctx) => {
   try {
     const { id } = ctx.params;
     const { price } = ctx.request.body;
-
     const userId = ctx.state.user.id;
 
-    const product = await Product.findOne({
-      where: { id, user_id: userId },
-    });
+    const product = await Product.findOne({ where: { id, user_id: userId } });
 
     if (!product) {
       ctx.status = 404;
@@ -84,8 +80,8 @@ exports.updateProductPrice = async (ctx) => {
     ctx.body = product;
   } catch (error) {
     console.error('Error in updateProductPrice:', error);
-    ctx.status = 500;
-    ctx.body = { error: 'Internal server error' };
+    ctx.status = error.status || 500;
+    ctx.body = { error: error.message || 'Internal server error' };
   }
 };
 

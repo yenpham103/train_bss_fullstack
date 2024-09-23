@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import clsx from 'clsx';
 import {
@@ -27,24 +27,31 @@ function CatalogConfig() {
   const status = useSelector(selectorStatus);
   const error = useSelector(selectorError);
   const router = useRouter();
+  const isInitialMount = useRef(true);
+  console.log(currentPage);
+  console.log(activeTab);
 
   useEffect(() => {
-    dispatch(getProducts({ page: currentPage, limit: 8, status: activeTab }));
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+    } else {
+      dispatch(getProducts({ page: currentPage, limit: 8, status: activeTab }));
+    }
   }, [dispatch, currentPage, activeTab]);
-
-  const handlePageChange = useCallback(
-    (page) => {
-      dispatch(setCurrentPage(page));
-    },
-    [dispatch]
-  );
 
   const handleTabAction = useCallback(
     (tab) => {
       dispatch(setActiveTab(tab));
       dispatch(setCurrentPage(1));
     },
-    [dispatch]
+    [dispatch, activeTab]
+  );
+
+  const handlePageChange = useCallback(
+    (page) => {
+      dispatch(setCurrentPage(page));
+    },
+    [dispatch, currentPage]
   );
 
   const handleReload = () => {
@@ -69,7 +76,7 @@ function CatalogConfig() {
       ) : (
         status === 'fulfilled' && (
           <div className={styles['catalog-config']}>
-            <div className={styles.TABS}>
+            <div className={styles.tabs}>
               {TABS.map((tab) => (
                 <button
                   key={tab}

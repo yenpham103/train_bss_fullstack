@@ -18,7 +18,6 @@ function ProductList() {
   const products = useSelector(selectorProducts);
   const selectedProducts = useSelector(selectorSelectedProducts);
   const currentActiveTab = useSelector(selectorActiveTab);
-  console.log(products);
 
   const dispatch = useDispatch();
   const [editingPrice, setEditingPrice] = useState(null);
